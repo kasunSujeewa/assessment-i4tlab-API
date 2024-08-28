@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Exceptions\CustomAuthException;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 
 class AuthService
@@ -23,9 +25,7 @@ class AuthService
         $user = $user->userFindByEmail($data['email']);
 
         if (!$user || !Hash::check($data['password'], $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+            throw new CustomAuthException();
         }
 
         return $user->createToken('API Token')->plainTextToken;
