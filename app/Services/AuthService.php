@@ -5,8 +5,6 @@ namespace App\Services;
 use App\Exceptions\CustomAuthException;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
