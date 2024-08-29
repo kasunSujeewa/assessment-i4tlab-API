@@ -22,7 +22,7 @@ class TaskService
         $show_task = $task->findOne($id);
 
         if ($show_task == null) {
-            return new CustomNotFoundException();
+            throw new CustomNotFoundException();
         } else {
             return $show_task;
         }
@@ -38,12 +38,12 @@ class TaskService
         $update_task = $task->findOne($id);
 
         if ($update_task == null) {
-            return new CustomNotFoundException();
+            throw new CustomNotFoundException();
         } else {
             if ($task->modify($update_task, $data)) {
                 return $task->findOne($id);
             } else {
-                return new CustomServerErrorException();
+                throw new CustomServerErrorException();
             }
         }
     }
@@ -53,12 +53,12 @@ class TaskService
         $show_task = $task->findOne($id);
 
         if ($show_task == null) {
-            return new CustomNotFoundException();
+            throw new CustomNotFoundException();
         } else {
             if ($task->remove($show_task)) {
                 return true;
             } else {
-                return new CustomServerErrorException();
+                throw new CustomServerErrorException();
             }
         }
     }

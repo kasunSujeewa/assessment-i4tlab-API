@@ -56,7 +56,7 @@ class TaskController extends BaseAPIController
     {
         $task = $this->taskService->update($id,$request->validated(),$this->task);
 
-        return $this->successResponse($task,"Task Updated Successfully",JsonResponse::HTTP_NO_CONTENT);
+        return $this->successResponse($task,"Task Updated Successfully",JsonResponse::HTTP_PARTIAL_CONTENT);
     }
 
     /**
@@ -64,7 +64,7 @@ class TaskController extends BaseAPIController
      */
     public function destroy(string $id)
     {
-        $task = $this->taskService->delete($id,$this->task);
+        $this->taskService->delete($id,$this->task);
 
         return $this->successResponse([],"Task Deleted Successfully",JsonResponse::HTTP_NO_CONTENT);
     }
