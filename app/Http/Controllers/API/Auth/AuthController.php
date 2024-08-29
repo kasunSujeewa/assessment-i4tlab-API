@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Auth;
 
+use App\Constants\Constant;
 use App\Http\Controllers\API\BaseAPIController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserLoginRequest;
@@ -27,7 +28,7 @@ class AuthController extends BaseAPIController
 
         $token = $this->authService->register($request->validated(),$this->user);
 
-        return $this->successResponse($token,"User Registered Successfully",JsonResponse::HTTP_CREATED);
+        return $this->successResponse($token,Constant::REGISTERED_SUCCESS_MESSAGE,JsonResponse::HTTP_CREATED);
     }
 
     public function login(UserLoginRequest $request)
@@ -35,6 +36,6 @@ class AuthController extends BaseAPIController
 
         $token = $this->authService->login($request->validated(),$this->user);
 
-        return $this->successResponse($token,'User Login Successfull');
+        return $this->successResponse($token,Constant::LOGGED_SUCCESS_MESSAGE);
     } 
 }

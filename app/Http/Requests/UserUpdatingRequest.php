@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Traits\CustomValidationResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TaskStoringRequest extends FormRequest
+class UserUpdatingRequest extends FormRequest
 {
     use CustomValidationResponseTrait;
     /**
@@ -24,7 +24,10 @@ class TaskStoringRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string',
+            'name' => 'string|max:255',
+            'email' => 'string|email|max:255|unique:users',
+            'password' => 'string|min:8',
+            'is_available' => 'boolean',
         ];
     }
 }

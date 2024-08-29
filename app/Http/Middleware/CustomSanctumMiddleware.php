@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Constants\Constant;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class CustomSanctumMiddleware
         return response()->json([
             'success' => false,
             'data'    => [],
-            'message' => 'Unauthorized',
+            'message' => Constant::UNAUTHORIZE,
         ], JsonResponse::HTTP_UNAUTHORIZED);
     }
 }

@@ -17,6 +17,9 @@ return new class extends Migration
             $table->enum('status', ['Pending', 'In Progress', 'Completed'])->default('Pending');
             $table->unsignedBigInteger('user_id')->nullable(); 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->unsignedBigInteger('worker_id')->nullable(); 
+            $table->foreign('worker_id')->references('id')->on('users')->onDelete('set null');
+            $table->date('due_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

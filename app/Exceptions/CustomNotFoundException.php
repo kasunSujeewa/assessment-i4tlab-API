@@ -2,13 +2,14 @@
 
 namespace App\Exceptions;
 
+use App\Constants\Constant;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
 class CustomNotFoundException extends Exception
 {
     protected $statusCode;
-    public function __construct($message = "Record Not Found", $statusCode = JsonResponse::HTTP_NOT_FOUND)
+    public function __construct($message = Constant::NOT_FOUND_MESSAGE, $statusCode = JsonResponse::HTTP_NOT_FOUND)
     {
         parent::__construct($message);
         $this->statusCode = $statusCode;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Constants\Constant;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class CustomSanctumAdminMiddleware
                 return response()->json([
                     'success' => false,
                     'data'    => [],
-                    'message' => 'Forbidden. You do not have the required permissions to access this resource.',
+                    'message' => Constant::FORBIDDEN,
                 ], JsonResponse::HTTP_FORBIDDEN);
             }
         }

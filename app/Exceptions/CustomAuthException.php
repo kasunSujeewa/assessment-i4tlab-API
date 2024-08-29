@@ -2,13 +2,14 @@
 
 namespace App\Exceptions;
 
+use App\Constants\Constant;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
 class CustomAuthException extends Exception
 {
     protected $statusCode;
-    public function __construct($message = "Invalid credentials", $statusCode = JsonResponse::HTTP_UNAUTHORIZED)
+    public function __construct($message = Constant::INVALID_LOGINS, $statusCode = JsonResponse::HTTP_UNAUTHORIZED)
     {
         parent::__construct($message);
         $this->statusCode = $statusCode;

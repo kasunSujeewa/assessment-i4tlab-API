@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_available',
+        'role'
     ];
 
     /**
@@ -49,11 +52,8 @@ class User extends Authenticatable
 
     public function store($data)
     {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $data['password'] = Hash::make($data['password']);
+        $user = User::create($data);
 
         return $user;
     }
@@ -63,5 +63,25 @@ class User extends Authenticatable
         $user = User::where('email',$email)->orderBy('created_at','desc')->first();
 
         return $user;
+    }
+
+    public function modify($user, $data)
+    {
+        return $user->update($data);
+    }
+
+    public function findOne($id,$user = new User())
+    {
+        return $user->find($id);
+    }
+
+    public function ownTasks(): HasMany
+    {
+        return $this->hasMany(Task::class,'user_id');
+    }
+
+    public function workingTasks(): HasMany
+    {
+        return $this->hasMany(Task::class,'worker_id');
     }
 }

@@ -2,13 +2,14 @@
 
 namespace App\Exceptions;
 
+use App\Constants\Constant;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
 class CustomServerErrorException extends Exception
 {
     protected $statusCode;
-    public function __construct($message = "Please Check Your Database Connection", $statusCode = JsonResponse::HTTP_INTERNAL_SERVER_ERROR)
+    public function __construct($message = Constant::DB_ERROR , $statusCode = JsonResponse::HTTP_INTERNAL_SERVER_ERROR)
     {
         parent::__construct($message);
         $this->statusCode = $statusCode;

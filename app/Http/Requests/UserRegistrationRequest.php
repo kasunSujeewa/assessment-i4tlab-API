@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\UserRole;
 use App\Traits\CustomValidationResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class UserRegistrationRequest extends FormRequest
 {
@@ -27,6 +29,7 @@ class UserRegistrationRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'role' => new Enum(UserRole::class)
         ];
     }
 }
