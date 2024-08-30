@@ -25,6 +25,7 @@ class TaskStoringRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
+            'due_date' => 'date_format:Y-m-d'
         ];
     }
 }

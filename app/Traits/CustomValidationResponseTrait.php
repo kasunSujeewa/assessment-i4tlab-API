@@ -20,7 +20,7 @@ trait CustomValidationResponseTrait
     protected function failedValidation(Validator $validator)
     {
         $response = response()->json([
-            'error' => true,
+            'success' => false,
             'message' => Constant::VALIDATION_ERROR,
             'errors' => $validator->errors()
         ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);

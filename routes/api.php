@@ -18,9 +18,11 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => [CustomSanctumAdminMiddleware::class]], function (){
     Route::apiResource('tasks',TaskController::class)->only(['store','destroy']);
+    Route::get('/user/list',[UserController::class,'getList']);
 });
 
 Route::group(['middleware' => [CustomSanctumMiddleware::class]], function (){
     Route::apiResource('tasks',TaskController::class)->only(['index','show','update']);
-    Route::post('/user',[UserController::class,'update']);
+    Route::post('/user/update',[UserController::class,'update']);
+    
 });

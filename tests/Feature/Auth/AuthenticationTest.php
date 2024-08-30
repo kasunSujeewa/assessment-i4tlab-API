@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Constants\Constant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 
 class AuthenticationTest extends TestCase
 {
@@ -15,19 +17,19 @@ class AuthenticationTest extends TestCase
     public function user_can_register()
     {
         $response = $this->postJson('/api/register', [
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
+            'name' => 'Test User',
+            'email' => 'test@example.com',
             'password' => 'password',
-            'password_confirmation' => 'password',
+            'confirm_password' => 'password',
         ]);
 
-        $response->assertStatus(201)
+        $response->assertStatus(JsonResponse::HTTP_CREATED)
                  ->assertJson([
                      'success' => true,
                  ]);
 
         $this->assertDatabaseHas('users', [
-            'email' => 'john@example.com',
+            'email' => 'test@example.com',
         ]);
     }
 
@@ -43,7 +45,7 @@ class AuthenticationTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(JsonResponse::HTTP_OK)
                  ->assertJson([
                      'success' => true,
                  ]);
@@ -56,10 +58,10 @@ class AuthenticationTest extends TestCase
             'name' => 'John Doe',
             'email' => 'invalid-email',
             'password' => 'password',
-            'password_confirmation' => 'password',
+            'confirm_password' => 'password',
         ]);
 
-        $response->assertStatus(422)
+        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
                  ->assertJsonValidationErrors(['email']);
     }
 
@@ -71,10 +73,10 @@ class AuthenticationTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertStatus(401)
+        $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
                  ->assertJson([
                      'success' => false,
-                     'message' => 'Invalid credentials',
+                     'message' => Constant::INVALID_LOGINS,
                  ]);
     }
 }

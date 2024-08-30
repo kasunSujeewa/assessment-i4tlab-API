@@ -60,7 +60,7 @@ class TaskController extends BaseAPIController
     {
         $task = $this->taskService->update($id,$request->validated(),$this->task,$this->request_user);
 
-        return $this->successResponse($task,Constant::TASK_UPDATED_SUCCESS_MESSAGE,JsonResponse::HTTP_PARTIAL_CONTENT);
+        return $this->successResponse($task,Constant::TASK_UPDATED_SUCCESS_MESSAGE,JsonResponse::HTTP_OK);
     }
 
     /**
@@ -70,6 +70,6 @@ class TaskController extends BaseAPIController
     {
         $this->taskService->delete($id,$this->task,$this->request_user);
 
-        return $this->successResponse([],Constant::TASK_DELETED_SUCCESS_MESSAGE,JsonResponse::HTTP_NO_CONTENT);
+        return $this->successResponse([],Constant::TASK_DELETED_SUCCESS_MESSAGE,JsonResponse::HTTP_OK);
     }
 }

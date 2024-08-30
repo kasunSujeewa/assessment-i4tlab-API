@@ -23,4 +23,14 @@ class UserService
             }
         }
     }
+    public function getList(User $user)
+    {
+        $all_active_users = $user->findAllActive($user);
+
+        if (count($all_active_users) == 0) {
+            throw new CustomNotFoundException();
+        } else {
+            return $all_active_users;
+        }
+    }
 }

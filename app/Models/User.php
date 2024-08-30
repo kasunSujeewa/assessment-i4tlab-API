@@ -3,6 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\TaskStatus;
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -73,6 +76,13 @@ class User extends Authenticatable
     public function findOne($id,$user = new User())
     {
         return $user->find($id);
+    }
+    public function findAllActive($user = new User())
+    {
+        return $user->where('role',UserRole::User)->where('is_available',true)->withCount(['workingTasks as working_tasks_count' => function ($query){
+            $query->where('status', TaskStatus::Pending)
+                  ->orWhere('status',TaskStatus::Progress);
+        }])->orderBy('working_tasks_count','asc')->get();
     }
 
     public function ownTasks(): HasMany
