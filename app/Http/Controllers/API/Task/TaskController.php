@@ -15,11 +15,9 @@ use Illuminate\Http\Request;
 class TaskController extends BaseAPIController
 {
     protected $taskService;
-    protected $task;
     protected $request_user;
-    public function __construct(TaskService $taskService, Task $task, Request $request) {
+    public function __construct(TaskService $taskService, Request $request) {
         $this->taskService = $taskService;
-        $this->task = $task;
         $this->request_user = $request->user('api');
     }
     /**
@@ -28,7 +26,7 @@ class TaskController extends BaseAPIController
     public function index()
     {
         
-        $tasks = $this->taskService->findAll($this->task,$this->request_user);
+        $tasks = $this->taskService->findAll($this->request_user);
 
         return $this->successResponse($tasks,Constant::TASKS_RECEIVED_SUCCESS_MESSAGE,JsonResponse::HTTP_OK);
     }
@@ -38,7 +36,7 @@ class TaskController extends BaseAPIController
      */
     public function store(TaskStoringRequest $request)
     {
-        $task = $this->taskService->store($request->validated(),$this->task,$this->request_user);
+        $task = $this->taskService->store($request->validated(),$this->request_user);
 
         return $this->successResponse($task,Constant::TASK_CREATED_SUCCESS_MESSAGE,JsonResponse::HTTP_CREATED);
     }
@@ -48,7 +46,7 @@ class TaskController extends BaseAPIController
      */
     public function show(string $id)
     {
-        $task = $this->taskService->show($id,$this->task,$this->request_user);
+        $task = $this->taskService->show($id,$this->request_user);
 
         return $this->successResponse($task,Constant::TASK_RECEIVED_SUCCESS_MESSAGE,JsonResponse::HTTP_OK);
     }
@@ -58,7 +56,7 @@ class TaskController extends BaseAPIController
      */
     public function update(TaskUpdatingRequest $request, string $id)
     {
-        $task = $this->taskService->update($id,$request->validated(),$this->task,$this->request_user);
+        $task = $this->taskService->update($id,$request->validated(),$this->request_user);
 
         return $this->successResponse($task,Constant::TASK_UPDATED_SUCCESS_MESSAGE,JsonResponse::HTTP_OK);
     }
@@ -68,7 +66,7 @@ class TaskController extends BaseAPIController
      */
     public function destroy(string $id)
     {
-        $this->taskService->delete($id,$this->task,$this->request_user);
+        $this->taskService->delete($id,$this->request_user);
 
         return $this->successResponse([],Constant::TASK_DELETED_SUCCESS_MESSAGE,JsonResponse::HTTP_OK);
     }

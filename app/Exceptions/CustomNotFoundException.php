@@ -14,12 +14,7 @@ class CustomNotFoundException extends Exception
         parent::__construct($message);
         $this->statusCode = $statusCode;
     }
-
-    /**
-     * Convert the exception into an HTTP response.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    
     public function render($request)
     {
         if ($request->expectsJson()) {

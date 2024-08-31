@@ -10,44 +10,57 @@ use App\Models\User;
 
 class UserTaskService implements TaskService
 {
-
-    public function findAll(Task $task, User $user)
-    {
-        return $task->getAllByWoker($task,$user);
+    protected $task;
+    public function __construct(Task $task) {
+        $this->task = $task;
     }
 
-    public function show(int $id, Task $task, User $user)
+    public function findAll(User $user)
     {
-        $show_task = $task->findOnebyWorker($id,$user,$task);
+        return $this->task->getAllByWoker($user);
+    }
 
-        if ($show_task == null) {
+    public function show(int $id, User $user)
+    {
+        $show_task = $this->task->findOnebyWorker($id,$user);
+
+        if ($show_task == null) 
+        {
             throw new CustomNotFoundException();
-        } else {
+        } 
+        else 
+        {
             return $show_task;
         }
     }
 
-    public function store(array $data, Task $task, User $user)
+    public function store(array $data, User $user)
     {
         
     }
 
-    public function update(int $id, array $data, Task $task, User $user)
+    public function update(int $id, array $data, User $user)
     {
-        $update_task = $task->findOnebyWorker($id,$user,$task);
+        $update_task = $this->task->findOnebyWorker($id,$user);
 
-        if ($update_task == null) {
+        if ($update_task == null) 
+        {
             throw new CustomNotFoundException();
-        } else {
-            if ($task->modifyByWorker($update_task, $data)) {
-                return $task->findOnebyWorker($id,$user);
-            } else {
+        } 
+        else 
+        {
+            if ($this->task->modifyByWorker($update_task, $data)) 
+            {
+                return $this->task->findOnebyWorker($id,$user);
+            } 
+            else 
+            {
                 throw new CustomServerErrorException();
             }
         }
     }
 
-    public function delete(int $id, Task $task, User $user)
+    public function delete(int $id, User $user)
     {
        
     }

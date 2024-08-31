@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Hamcrest\Type\IsBoolean;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,38 +14,46 @@ class Task extends Model
 
     protected $guarded = [];
 
-    public function getAllByOwner($task,$user)
+    public static function getAllByOwner($user)
     {
-        return $task->with(['owner','worker'])->where('user_id',$user->id)->orderBy('created_at', 'desc')->paginate(10);
+        return self::with(['owner', 'worker'])->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(8);
     }
-    public function getAllByWoker($task,$user)
+
+    public static function getAllByWoker($user)
     {
-        return $task->with(['owner','worker'])->where('worker_id',$user->id)->orderBy('created_at', 'desc')->paginate(10);
+        return self::with(['owner', 'worker'])->where('worker_id', $user->id)->orderBy('created_at', 'desc')->paginate(8);
     }
-    public function findOneByOWner($id,$user,$task = new Task())
+
+    public static function findOneByOWner($id, $user)
     {
-        return $task->with(['owner','worker'])->where('id',$id)->where('user_id',$user->id)->first();
+        return self::with(['owner', 'worker'])->where('id', $id)->where('user_id', $user->id)->first();
     }
-    public function findOnebyWorker($id,$user,$task = new Task())
+
+    public static function findOnebyWorker($id, $user)
     {
-        return $task->with(['owner','worker'])->where('id',$id)->where('worker_id',$user->id)->first();
+        return self::with(['owner', 'worker'])->where('id', $id)->where('worker_id', $user->id)->first();
     }
-    public function store($data,$task,$user)
+
+    public static function store($data, $user)
     {
         $data['user_id'] = $user->id;
-        return $task->create($data);
+        return self::create($data);
     }
+
     public function modifyByOwner($task, $data)
     {
         return $task->update($data);
     }
+
     public function modifyByWorker($task, $data)
     {
-        if(isset($data['status'])){
-            return $task->update(['status' => $data['status'] ]);
+        if (isset($data['status'])) 
+        {
+            return $task->update(['status' => $data['status']]);
         }
         return true;
     }
+    
     public function remove($task)
     {
         return $task->delete();
@@ -52,11 +61,11 @@ class Task extends Model
 
     public function owner(): BelongsTo
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function worker(): BelongsTo
     {
-        return $this->belongsTo(User::class,'worker_id');
+        return $this->belongsTo(User::class, 'worker_id');
     }
 }

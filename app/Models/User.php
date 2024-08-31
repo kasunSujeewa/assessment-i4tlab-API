@@ -15,13 +15,8 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable,HasApiTokens ;
+    use HasFactory, Notifiable, HasApiTokens;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -30,21 +25,11 @@ class User extends Authenticatable
         'role'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -53,45 +38,45 @@ class User extends Authenticatable
         ];
     }
 
-    public function store($data)
+    public static function store($data)
     {
         $data['password'] = Hash::make($data['password']);
-        $user = User::create($data);
+        $user = self::create($data);
 
         return $user;
     }
 
-    public function userFindByEmail($email)
+    public static function userFindByEmail($email)
     {
-        $user = User::where('email',$email)->orderBy('created_at','desc')->first();
+        $user = self::where('email', $email)->orderBy('created_at', 'desc')->first();
 
         return $user;
     }
 
-    public function modify($user, $data)
+    public static function modify($user, $data)
     {
         return $user->update($data);
     }
 
-    public function findOne($id,$user = new User())
+    public static function findOne($id)
     {
-        return $user->find($id);
+        return self::find($id);
     }
-    public function findAllActive($user = new User())
+    public static function findAllActive()
     {
-        return $user->where('role',UserRole::User)->where('is_available',true)->withCount(['workingTasks as working_tasks_count' => function ($query){
+        return self::where('role', UserRole::User)->where('is_available', true)->withCount(['workingTasks as working_tasks_count' => function ($query) {
             $query->where('status', TaskStatus::Pending)
-                  ->orWhere('status',TaskStatus::Progress);
-        }])->orderBy('working_tasks_count','asc')->get();
+                ->orWhere('status', TaskStatus::Progress);
+        }])->orderBy('working_tasks_count', 'asc')->get();
     }
 
     public function ownTasks(): HasMany
     {
-        return $this->hasMany(Task::class,'user_id');
+        return $this->hasMany(Task::class, 'user_id');
     }
 
     public function workingTasks(): HasMany
     {
-        return $this->hasMany(Task::class,'worker_id');
+        return $this->hasMany(Task::class, 'worker_id');
     }
 }

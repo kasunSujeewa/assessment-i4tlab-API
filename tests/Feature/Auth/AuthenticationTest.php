@@ -55,7 +55,7 @@ class AuthenticationTest extends TestCase
     public function registration_requires_valid_email()
     {
         $response = $this->postJson('/api/register', [
-            'name' => 'John Doe',
+            'name' => 'Test user',
             'email' => 'invalid-email',
             'password' => 'password',
             'confirm_password' => 'password',

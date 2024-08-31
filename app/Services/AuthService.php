@@ -8,24 +8,30 @@ use App\Models\User;
 
 class AuthService
 {
-    
+    protected $user;
 
-    public function register(array $data, User $user)
+    public function __construct(User $user)
     {
-        $auth_user = $user->store($data);
+        $this->user = $user;
+    }
+    
+    public function register(array $data)
+    {
+        $auth_user = $this->user::store($data);
 
         return $auth_user->createToken('API Token')->plainTextToken;
     }
 
-    public function login(array $data,User $user)
+    public function login(array $data)
     {
        
-        $user = $user->userFindByEmail($data['email']);
+        $auth_user = $this->user::userFindByEmail($data['email']);
 
-        if (!$user || !Hash::check($data['password'], $user->password)) {
+        if (!$auth_user || !Hash::check($data['password'], $auth_user->password)) 
+        {
             throw new CustomAuthException();
         }
 
-        return $user->createToken('API Token')->plainTextToken;
+        return $auth_user->createToken('API Token')->plainTextToken;
     }
 }
