@@ -38,29 +38,17 @@ class UserService
     public function getList()
     {
         $all_active_users = $this->user->findAllActive($this->user);
-
-        if (count($all_active_users) == 0) 
-        {
-            throw new CustomNotFoundException();
-        } 
-        else 
-        {
-            return $all_active_users;
-        }
+        
+        return $all_active_users;
+        
     }
 
     public function getAll()
     {
         $all_users = $this->user->orderBy('created_at','desc')->get();
-
-        if (count($all_users) == 0) 
-        {
-            throw new CustomNotFoundException();
-        } 
-        else 
-        {
-            return $all_users;
-        }
+        
+        return $all_users;
+        
     }
     
     public function generate($data)

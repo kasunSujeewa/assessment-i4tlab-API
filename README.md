@@ -25,8 +25,13 @@ This project is a Laravel 11 application
 
 3. **Copy the `.env` file:**
 
+**Linux Server:**
     ```bash
     cp .env.example .env
+    ```
+**Windows CMD:**
+    ```bash
+    copy .env.example .env
     ```
 
 4. **Generate the application key:**

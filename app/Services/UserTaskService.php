@@ -40,25 +40,33 @@ class UserTaskService implements TaskService
     }
 
     public function update(int $id, array $data, User $user)
-    {
-        $update_task = $this->task->findOnebyWorker($id,$user);
+{
+    try {
+        
+        $update_task = $this->task->findOnebyWorker($id, $user);
 
-        if ($update_task == null) 
-        {
+        if ($update_task === null) {
             throw new CustomNotFoundException();
-        } 
-        else 
-        {
-            if ($this->task->modifyByWorker($update_task, $data)) 
-            {
-                return $this->task->findOnebyWorker($id,$user);
-            } 
-            else 
-            {
-                throw new CustomServerErrorException();
-            }
         }
+
+        if ($this->task->modifyByWorker($update_task, $data)) {
+            return $this->task->findOnebyWorker($id, $user);
+        } else {
+            throw new CustomServerErrorException();
+        }
+
+    } catch (CustomNotFoundException $e) {
+        throw $e; 
+
+    } catch (CustomServerErrorException $e) {
+       
+        throw $e; 
+
+    } catch (\Exception $e) {
+        throw new \Exception('An unexpected error occurred. Please try again later.', 0, $e);
     }
+}
+
 
     public function delete(int $id, User $user)
     {
