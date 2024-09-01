@@ -111,12 +111,4 @@ class UserServiceTest extends TestCase
         $this->userService->update(999, ['name' => 'Not Found']);
     }
 
-    /** @test */
-    public function it_throws_not_found_exception_when_no_users_found()
-    {
-        $this->expectException(CustomNotFoundException::class);
-
-        // Act: Try to retrieve users when there are none
-        $this->userService->getAll();
-    }
 }

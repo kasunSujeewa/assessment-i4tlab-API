@@ -73,6 +73,13 @@ This project is a Laravel 11 application
     ```
 
     This will run the database migrations and make the tables
+7. **Run Test Cases**
+
+    ```bash
+    php artisan test
+    ```
+
+    This will run the test cases
 
 ## Usage
 
