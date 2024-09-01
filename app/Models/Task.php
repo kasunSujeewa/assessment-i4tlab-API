@@ -14,14 +14,26 @@ class Task extends Model
 
     protected $guarded = [];
 
-    public static function getAllByOwner($user)
+    public static function getAllByOwner($user,$params)
     {
-        return self::with(['owner', 'worker'])->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(8);
+        $query = self::with(['owner', 'worker'])->where('user_id', $user->id)->orderBy('created_at', 'desc');
+
+        if (in_array($params, ['Pending', 'In Progress', 'Completed'])) {
+            $query->where('status', $params);
+        }
+        
+        return $query->paginate(10);
     }
 
-    public static function getAllByWoker($user)
+    public static function getAllByWoker($user,$params)
     {
-        return self::with(['owner', 'worker'])->where('worker_id', $user->id)->orderBy('created_at', 'desc')->paginate(8);
+        $query = self::with(['owner', 'worker'])->where('worker_id', $user->id)->orderBy('created_at', 'desc');
+
+        if (in_array($params, ['Pending', 'In Progress', 'Completed'])) {
+            $query->where('status', $params);
+        }
+        
+        return $query->paginate(10);
     }
 
     public static function findOneByOWner($id, $user)

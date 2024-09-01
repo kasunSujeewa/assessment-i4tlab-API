@@ -23,10 +23,10 @@ class TaskController extends BaseAPIController
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index(Request $request)
+    {       
         
-        $tasks = $this->taskService->findAll($this->request_user);
+        $tasks = $this->taskService->findAll($this->request_user,$request->get('status'));
 
         return $this->successResponse($tasks,Constant::TASKS_RECEIVED_SUCCESS_MESSAGE,JsonResponse::HTTP_OK);
     }

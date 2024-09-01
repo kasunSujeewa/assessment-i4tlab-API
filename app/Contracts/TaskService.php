@@ -5,7 +5,7 @@ use App\Models\User;
 
 interface TaskService
 {
-    public function findAll(User $user);
+    public function findAll(User $user, $params = null);
     
 
     public function show(int $id,User $user);

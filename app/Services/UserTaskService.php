@@ -15,9 +15,9 @@ class UserTaskService implements TaskService
         $this->task = $task;
     }
 
-    public function findAll(User $user)
+    public function findAll(User $user,$params = null)
     {
-        return $this->task->getAllByWoker($user);
+        return $this->task->getAllByWoker($user,$params);
     }
 
     public function show(int $id, User $user)
