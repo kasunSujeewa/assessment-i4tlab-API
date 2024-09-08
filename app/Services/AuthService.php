@@ -14,21 +14,20 @@ class AuthService
     {
         $this->user = $user;
     }
-    
+
     public function register(array $data)
     {
-        $auth_user = $this->user::store($data);
+        $auth_user = $this->user::create($data);
 
         return $auth_user->createToken('API Token')->plainTextToken;
     }
 
     public function login(array $data)
     {
-       
-        $auth_user = $this->user::userFindByEmail($data['email']);
 
-        if (!$auth_user || !Hash::check($data['password'], $auth_user->password)) 
-        {
+        $auth_user = $this->user::where('email', $data['email'])->orderBy('created_at', 'desc')->first();
+
+        if (!$auth_user || !Hash::check($data['password'], $auth_user->password)) {
             throw new CustomAuthException();
         }
 

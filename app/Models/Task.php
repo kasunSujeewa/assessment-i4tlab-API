@@ -14,63 +14,6 @@ class Task extends Model
 
     protected $guarded = [];
 
-    public static function getAllByOwner($user,$params)
-    {
-        $query = self::with(['owner', 'worker'])->where('user_id', $user->id)->orderBy('created_at', 'desc');
-
-        if (in_array($params, ['Pending', 'In Progress', 'Completed'])) {
-            $query->where('status', $params);
-        }
-        
-        return $query->paginate(10);
-    }
-
-    public static function getAllByWoker($user,$params)
-    {
-        $query = self::with(['owner', 'worker'])->where('worker_id', $user->id)->orderBy('created_at', 'desc');
-
-        if (in_array($params, ['Pending', 'In Progress', 'Completed'])) {
-            $query->where('status', $params);
-        }
-        
-        return $query->paginate(10);
-    }
-
-    public static function findOneByOWner($id, $user)
-    {
-        return self::with(['owner', 'worker'])->where('id', $id)->where('user_id', $user->id)->first();
-    }
-
-    public static function findOnebyWorker($id, $user)
-    {
-        return self::with(['owner', 'worker'])->where('id', $id)->where('worker_id', $user->id)->first();
-    }
-
-    public static function store($data, $user)
-    {
-        $data['user_id'] = $user->id;
-        return self::create($data);
-    }
-
-    public function modifyByOwner($task, $data)
-    {
-        return $task->update($data);
-    }
-
-    public function modifyByWorker($task, $data)
-    {
-        if (isset($data['status'])) 
-        {
-            return $task->update(['status' => $data['status']]);
-        }
-        return true;
-    }
-    
-    public function remove($task)
-    {
-        return $task->delete();
-    }
-
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
