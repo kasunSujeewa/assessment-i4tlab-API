@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\TaskStatus;
+use App\Enums\UserRole;
 use App\Exceptions\CustomNotFoundException;
 use App\Exceptions\CustomServerErrorException;
 use App\Models\User;
@@ -16,30 +18,26 @@ class UserService
 
     public function update(int $id, array $data)
     {
-        $update_user = $this->user::findOne($id);
+        $update_user = $this->user::find($id);
 
         if ($update_user == null) 
         {
             throw new CustomNotFoundException();
         } 
         else 
-        {
-            if ($this->user::modify($update_user, $data)) 
-            {
-                return $this->user->findOne($id);
-            }
-            else 
-            {
-                throw new CustomServerErrorException();
-            }
+        { 
+            $user_data = $update_user->update($data);
+            return $user_data;  
         }
     }
 
     public function getList()
     {
-        $all_active_users = $this->user->findAllActive($this->user);
+        return $this->user::where('role', UserRole::User)->where('is_available', true)->withCount(['workingTasks as working_tasks_count' => function ($query) {
+            $query->where('status', TaskStatus::Pending)
+                ->orWhere('status', TaskStatus::Progress);
+        }])->orderBy('working_tasks_count', 'asc')->get();
         
-        return $all_active_users;
         
     }
 
@@ -53,7 +51,7 @@ class UserService
     
     public function generate($data)
     {
-        $user_data = $this->user::store($data);
+        $user_data = $this->user::create($data);
         return $user_data;
     }
 

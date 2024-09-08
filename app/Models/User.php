@@ -38,37 +38,14 @@ class User extends Authenticatable
         ];
     }
 
-    public static function store($data)
+    /**
+     * Accessor to hash password automatically.
+     */
+    public function setPasswordAttribute($value)
     {
-        $data['password'] = Hash::make($data['password']);
-        $user = self::create($data);
-
-        return $user;
+        $this->attributes['password'] = bcrypt($value);
     }
 
-    public static function userFindByEmail($email)
-    {
-        $user = self::where('email', $email)->orderBy('created_at', 'desc')->first();
-
-        return $user;
-    }
-
-    public static function modify($user, $data)
-    {
-        return $user->update($data);
-    }
-
-    public static function findOne($id)
-    {
-        return self::find($id);
-    }
-    public static function findAllActive()
-    {
-        return self::where('role', UserRole::User)->where('is_available', true)->withCount(['workingTasks as working_tasks_count' => function ($query) {
-            $query->where('status', TaskStatus::Pending)
-                ->orWhere('status', TaskStatus::Progress);
-        }])->orderBy('working_tasks_count', 'asc')->get();
-    }
 
     public function ownTasks(): HasMany
     {
