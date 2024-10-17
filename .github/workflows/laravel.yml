@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  laravel-tests:
+  build:
 
     runs-on: self-hosted
 
